@@ -1,9 +1,11 @@
 #ifndef __TIMEBOMB_HH
 #define __TIMEBOMB_HH
 
-#define __tb_deprecated_on(x) static_assert(x, __DATE__)
+#define __tb_deprecate_on(_d, _msg) static_assert(__tbIsDate(_d), _msg)
+#define __tb_deprecate_after(_d, _msg) static_assert(__tbIsAfterDate(_d), _msg)
 
-consteval bool cstreq(const char *a, const char *b) {
+namespace timebomb {
+static consteval bool cstreq(const char *a, const char *b) {
   if (!a || !b) return false;
   while (*a && *b) {
     bool hasWS = *a == ' ' || *b == ' ';
@@ -36,7 +38,7 @@ consteval int monthKey(const char mon[3]) {
   return mon[0] + (mon[1] + 26) + (mon[2] + (26 * 2));
 }
 
-consteval Date getMonDayYear(char *date) {
+consteval Date getMonDayYear(const char *date) {
   if (!date) return {0, 0, 0};
   const char *d = (const char *)date;
 
@@ -84,6 +86,22 @@ consteval Date getMonDayYear(char *date) {
   return {mon, day, year};
 }
 
-constexpr Date TheCompilerDate = getMonDayYear((char *)__DATE__);
+static constexpr Date TheCompilerDate = getMonDayYear((char *)__DATE__);
+};  // namespace timebomb
 
-#endif // __TIMEBOMB_HH
+consteval bool __tbIsDate(const char *a) {
+  timebomb::Date aDate = timebomb::getMonDayYear(a);
+  return (aDate.day == timebomb::TheCompilerDate.day) &&
+         (aDate.month == timebomb::TheCompilerDate.month) &&
+         (aDate.year == timebomb::TheCompilerDate.year);
+}
+
+// Is 'a' after 'b'?
+consteval bool __tbIsAfterDate(const char *a) {
+  timebomb::Date aDate = timebomb::getMonDayYear(a);
+  return (aDate.year >= timebomb::TheCompilerDate.year) &&
+         (aDate.month >= timebomb::TheCompilerDate.month) &&
+         (aDate.day > timebomb::TheCompilerDate.day);
+}
+
+#endif  // __TIMEBOMB_HH

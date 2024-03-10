@@ -1,18 +1,19 @@
 #include <iostream>
 #include <numeric>
 
+#include "example.hh"
 #include "timebomb.hh"
 
 constexpr bool tests[] = {
-    true == cstreq("Jan  1 1980", __DATE__),
-    true == cstreq(" Jan  1 1980", __DATE__),
-    true == cstreq("Jan 1 1980", __DATE__),
-    true == cstreq("Jan 1 1980 ", __DATE__),
-    true == cstreq("Jan  1 1980 ", __DATE__),
-    true == cstreq(" Jan  1 1980 ", __DATE__),
-    false == cstreq("Jan  2 1980", __DATE__),
-    false == cstreq("Jan  1 1981", __DATE__),
-    false == cstreq("Jan  1 1981 ", __DATE__),
+    true == timebomb::cstreq("Jan  1 1980", __DATE__),
+    true == timebomb::cstreq(" Jan  1 1980", __DATE__),
+    true == timebomb::cstreq("Jan 1 1980", __DATE__),
+    true == timebomb::cstreq("Jan 1 1980 ", __DATE__),
+    true == timebomb::cstreq("Jan  1 1980 ", __DATE__),
+    true == timebomb::cstreq(" Jan  1 1980 ", __DATE__),
+    false == timebomb::cstreq("Jan  2 1980", __DATE__),
+    false == timebomb::cstreq("Jan  1 1981", __DATE__),
+    false == timebomb::cstreq("Jan  1 1981 ", __DATE__),
 };
 constexpr int NTests = sizeof(tests) / sizeof(tests[0]);
 
