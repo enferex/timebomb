@@ -1,9 +1,12 @@
-timebomb: C++ header for implementing compile time asserts based on __date.
+timebomb: C++ header for implementing compile time asserts based on_date.
 =========================================================================
 
 This header-only "library" provides utility functions that can be used to write
-static assertions that trigger on a particular __DATE____. This might be useful
-when planning a future deprecation of an API.  This requires c++20 or later.
+static assertions that trigger on a particular `__DATE__`. This might be useful
+when planning a future deprecation of an API.
+
+This header requires c++20 or later and also makes use of the compiler provided
+`__DATE__` macro.
 
 Usage
 -----
