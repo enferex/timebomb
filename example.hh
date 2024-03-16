@@ -1,4 +1,4 @@
 #include "timebomb.hh"
 
-__tb_deprecate_after("Jan 19 2038", "This API is cooked on...");
+__tb_deprecate_after("Jan 19 2038", "This API is cooked.");
 void myCoolAPI();
