@@ -4,6 +4,7 @@ all: test
 
 test: test.o
 	$(CXX) $(CXXFLAGS) $^ -o $@
+	./test
 
 .PHONY: clean
 clean:

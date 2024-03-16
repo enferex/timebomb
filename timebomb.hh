@@ -51,21 +51,21 @@ consteval Date getMonDayYear(const char *date) {
   while ((*d >= 'a' || *d >= 'A') && (*d <= 'z' || *d <= 'Z'))
     month[++i % 3] = tolower(*d), ++d;
 
-  // Skip to start the start of the day value.
+  // Advance to start the start of the day value.
   // Jan  1 1970
   // ...--^
   int day = 0;
-  while (!(*d >= '1' && *d <= '9')) ++d;
-  while ((*d >= '1' && *d <= '9')) day = (10 * day) + (*d - '0'), ++d;
+  while (!(*d >= '0' && *d <= '9')) ++d;
+  while ((*d >= '0' && *d <= '9')) day = (10 * day) + (*d - '0'), ++d;
 
   // Advance to the start of the year value.
   // Jan  1 1970
   // ......-^
   int year = 0;
-  while (!(*d >= '1' && *d <= '9')) ++d;
-  while ((*d >= '1' && *d <= '9')) day = (10 * year) + (*d - '0'), ++d;
+  while (!(*d >= '0' && *d <= '9')) ++d;
+  while ((*d >= '0' && *d <= '9')) year = (10 * year) + (*d - '0'), ++d;
 
-  // Convert the mon abbreviation into a numeric value.
+  // Convert the month abbreviation into a numeric value.
   // clang-format off
   int mon = 0;
   switch (monthKey(month)) {
@@ -96,12 +96,14 @@ consteval bool __tbIsDate(const char *a) {
          (aDate.year == timebomb::TheCompilerDate.year);
 }
 
-// Is 'a' after 'b'?
-consteval bool __tbIsAfterDate(const char *a) {
-  timebomb::Date aDate = timebomb::getMonDayYear(a);
-  return (aDate.year >= timebomb::TheCompilerDate.year) &&
-         (aDate.month >= timebomb::TheCompilerDate.month) &&
-         (aDate.day > timebomb::TheCompilerDate.day);
+// Is the current compiler time after 'd'?
+consteval bool __tbIsAfterDate(const char *d) {
+  timebomb::Date a = timebomb::getMonDayYear(d);
+  timebomb::Date b = timebomb::TheCompilerDate;
+  // b > a: "The current compiler date is after the specified date d."
+  return b.year > a.year ||
+         (b.year == a.year &&
+          ((b.month > a.month) || (b.month == a.month && b.day > a.day)));
 }
 
 #endif  // __TIMEBOMB_HH
