@@ -5,24 +5,6 @@
 #define __tb_deprecate_after(_d, _msg) static_assert(__tbIsAfterDate(_d), _msg)
 
 namespace timebomb {
-static consteval bool cstreq(const char *a, const char *b) {
-  if (!a || !b) return false;
-  while (*a && *b) {
-    bool hasWS = *a == ' ' || *b == ' ';
-    while (*a == ' ') ++a;
-    while (*b == ' ') ++b;
-    if (!hasWS) {
-      ++b;
-      ++a;
-    }
-    if (*a != *b) break;
-  }
-
-  while (*a == ' ') ++a;
-  while (*b == ' ') ++b;
-  return *a == '\0' && *b == '\0';
-}
-
 struct Date {
   // Jan  1 1970
   int month, day, year;
@@ -30,7 +12,7 @@ struct Date {
 
 consteval char tolower(char c) {
   return (c >= 'a' && c <= 'z')   ? c
-         : (c >= 'A' && c <= 'Z') ? ('a' + ('Z' - c))
+         : (c >= 'A' && c <= 'Z') ? ('a' + (c - 'A'))
                                   : 0;
 }
 
@@ -49,7 +31,7 @@ consteval Date getMonDayYear(const char *date) {
   char month[3]{};
   while (*d == ' ') ++d;
   while ((*d >= 'a' || *d >= 'A') && (*d <= 'z' || *d <= 'Z'))
-    month[++i % 3] = tolower(*d), ++d;
+    month[i++ % 3] = tolower(*d), ++d;
 
   // Advance to start the start of the day value.
   // Jan  1 1970
@@ -94,6 +76,12 @@ consteval bool __tbIsDate(const char *a) {
   return (aDate.day == timebomb::TheCompilerDate.day) &&
          (aDate.month == timebomb::TheCompilerDate.month) &&
          (aDate.year == timebomb::TheCompilerDate.year);
+}
+
+// For testing getMonDayYear.
+consteval bool __tbIsDate2(const char *aStr, const timebomb::Date d) {
+  timebomb::Date a = timebomb::getMonDayYear(aStr);
+  return a.month == d.month && a.day == d.day && a.year == d.year;
 }
 
 // Is the current compiler time after 'd'?
