@@ -1,4 +1,4 @@
-timebomb: C++ header for implementing compile time asserts based on_date.
+timebomb: C++ header for implementing compile time asserts based on date.
 =========================================================================
 
 This header-only "library" provides utility functions that can be used to write
