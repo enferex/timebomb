@@ -10,6 +10,7 @@ This header requires c++20 or later and also makes use of the compiler provided
 
 Usage
 -----
+Include "timebomb.hh" in your source file(s).
 See test.cc and example.hh
 
 Building
